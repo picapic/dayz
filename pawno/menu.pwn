@@ -458,11 +458,11 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		new Float:dx, Float:dy, Float:Z_coord;
 		//new Float:Alpha, Float:Beta;
 		
-		if(IsValidObject(object_id[0]))
+		if(IsValidDynamicObject(object_id[0]))
 		{
 		    for(i = 0; i < 256; ++i)
 		    {
-				DestroyObject(object_id[i]);
+				DestroyDynamicObject(object_id[i]);
 				object_id[i] = 0;
 		    }
 		    return 1;
@@ -478,7 +478,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		        dy = floatadd(Float:Y, floatmul(j, 0.35));//(Float:j)/10.0;
 //				MapAndreas_Valid_Z_Coordinate(dx,dy,Z,Z_coord,Alpha,Beta);
 				MapAndreas_FindZ_For2DCoord_I(dx, dy, Z_coord);
-		        object_id[i*16+j] = CreateObject(1857, dx, dy, Z_coord+1.0, 0.0, 0.0, 0.0, 100.0);
+		        object_id[i*16+j] = CreateDynamicObject(1857, dx, dy, Z_coord+1.0, 0.0, 0.0, 0.0, -1, -1, -1, 100.0, 0.0);
 //		        new str[160]; //отладка!!!
 //		        format(str, sizeof(str), "i=%d, j=%d, object_id[%d]=%d, dx=%f, dy=%f, Z_coord=%f", i, j, i*2+j, object_id[i*2+j], dx, dy, Z_coord); //отладка!!!
 //		        SendClientMessage(playerid, 0xFFFF00, str); //отладка!!!

@@ -434,9 +434,9 @@ public load_objects()
 					}
 			    }
 			    if(rotatable && ret == 0)
-					obj_id = CreateObject(inworld_id, x, y, z+height, rotx+add_rotx, roty+add_roty, rotz+add_rotz, OBJECT_DISTANCE);
+					obj_id = CreateDynamicObject(inworld_id, x, y, z+height, rotx+add_rotx, roty+add_roty, rotz+add_rotz, -1, -1, -1, OBJECT_DISTANCE, 0.0);
 				else
-					obj_id = CreateObject(inworld_id, x, y, z+height, rotx, roty, rotz, OBJECT_DISTANCE);
+					obj_id = CreateDynamicObject(inworld_id, x, y, z+height, rotx, roty, rotz, -1, -1, -1, OBJECT_DISTANCE, 0.0);
 				//переделать все vector под VectorSize()
 				//...
 			    mysql_format(gMysql, request, sizeof(request), "UPDATE objects SET vector=%f,placex=%f,placey=%f,placez=%f,add_rotx=%f,add_roty=%f,obj_id=%d,pl_owner_id=NULL,th_owner_id=NULL,value=%d WHERE id=%d", VectorSize(x,y,z), x, y, z, add_rotx, add_roty, obj_id, def_value, id);
@@ -484,9 +484,9 @@ public load_objects()
 			{
 				//сохраняем для объектов координаты персонажа и разницу высот
 				if(rotatable == 1)
-					obj_id = CreateObject(inworld_id, x, y, z+height, rotx+add_rotx, roty+add_roty, rotz+add_rotz, OBJECT_DISTANCE);
+					obj_id = CreateDynamicObject(inworld_id, x, y, z+height, rotx+add_rotx, roty+add_roty, rotz+add_rotz, -1, -1, -1, OBJECT_DISTANCE, 0.0);
 				else
-					obj_id = CreateObject(inworld_id, x, y, z+height, rotx, roty, rotz, OBJECT_DISTANCE);
+					obj_id = CreateDynamicObject(inworld_id, x, y, z+height, rotx, roty, rotz, -1, -1, -1, OBJECT_DISTANCE, 0.0);
 			    mysql_format(gMysql, request, sizeof(request), "UPDATE objects SET obj_id=%d,dot_id=NULL,pl_owner_id=NULL,th_owner_id=NULL WHERE id=%d", obj_id, id);
 				mysql_query(gMysql, request);
 			}
@@ -565,11 +565,11 @@ public load_objects()
 				    }
 				    if(rotatable && ret == 0)
 				    {
-						obj_id = CreateObject(inworld_id, x, y, z+height, rotx+add_rotx, roty+add_roty, rotz, OBJECT_DISTANCE);
+						obj_id = CreateDynamicObject(inworld_id, x, y, z+height, rotx+add_rotx, roty+add_roty, rotz, -1, -1, -1, OBJECT_DISTANCE, 0.0);
 					}
 					else
 					{
-						obj_id = CreateObject(inworld_id, x, y, z+height, rotx, roty, rotz, OBJECT_DISTANCE);
+						obj_id = CreateDynamicObject(inworld_id, x, y, z+height, rotx, roty, rotz, -1, -1, -1, OBJECT_DISTANCE, 0.0);
 					}
 					res = composit_thing(request, main_thing_id);
 					if(res > 0 && main_thing_id > 0 && prev_id == 0) //для устранения 'бесконечных' используемых вещей
@@ -670,11 +670,11 @@ public set_new_objects_on_places()
 				    }
 				    if(rotatable && ret == 0)
 				    {
-						obj_id = CreateObject(inworld_id, x, y, z+height, rotx+add_rotx, roty+add_roty, rotz, OBJECT_DISTANCE);
+						obj_id = CreateDynamicObject(inworld_id, x, y, z+height, rotx+add_rotx, roty+add_roty, rotz, -1, -1, -1, OBJECT_DISTANCE, 0.0);
 					}
 					else
 					{
-						obj_id = CreateObject(inworld_id, x, y, z+height, rotx, roty, rotz, OBJECT_DISTANCE);
+						obj_id = CreateDynamicObject(inworld_id, x, y, z+height, rotx, roty, rotz, -1, -1, -1, OBJECT_DISTANCE, 0.0);
 					}
 					res = composit_thing(request, main_thing_id);
 					if(res > 0 && main_thing_id > 0 && prev_id == 0) //для устранения 'бесконечных' используемых вещей
@@ -726,7 +726,7 @@ public destroy_objects()
 			}
 			else
 			{
-				DestroyObject(obj_id);
+				DestroyDynamicObject(obj_id);
 			}
 		    mysql_format(gMysql, request, sizeof(request), "UPDATE objects SET obj_id=NULL,pl_owner_id=NULL,th_owner_id=NULL WHERE id=%d", id);
 			mysql_query(gMysql, request);
@@ -930,8 +930,8 @@ public set_character_inventory_cell(playerid, cell, object_id)
 	if(cache_is_valid(result, gMysql))
 		cache_delete(result);
 
-	if(obj_id != INVALID_OBJECT_ID && IsValidObject(obj_id))
-	    DestroyObject(obj_id);
+	if(obj_id != INVALID_OBJECT_ID && IsValidDynamicObject(obj_id))
+	    DestroyDynamicObject(obj_id);
 
 	//занимаем ячейку
     mysql_format(gMysql, request, sizeof(request), "UPDATE inventory SET inv%d=%d WHERE player_id=%d", cell+1, object_id, gPlayersID[playerid]);
@@ -1005,8 +1005,8 @@ public set_vehicle_inventory_cell(vehicleid, cell, object_id)
 	if(cache_is_valid(result, gMysql))
 		cache_delete(result);
 
-	if(obj_id != INVALID_OBJECT_ID && IsValidObject(obj_id))
-	    DestroyObject(obj_id);
+	if(obj_id != INVALID_OBJECT_ID && IsValidDynamicObject(obj_id))
+	    DestroyDynamicObject(obj_id);
 
 	//указываем вледельца для объекта и обнуляем поле игрового объекта, точки появления объекта и флаг неиспользования объекта
 	//если объект до этого принадлежал другому персонажу, сохраняем id прежнего владельца
@@ -1179,12 +1179,12 @@ public drop_character_inventory_cell(playerid, cell, obj_cell)
 	if(rotatable == 1 && ret == 0)
 	{
 	    //если место вполне подходит
-	    obj_id = CreateObject(modelid, dx, dy, Z_coord+height+1.0, rotx+Beta, roty+Alpha, rotz, OBJECT_DISTANCE);
+	    obj_id = CreateDynamicObject(modelid, dx, dy, Z_coord+height+1.0, rotx+Beta, roty+Alpha, rotz, -1, -1, -1, OBJECT_DISTANCE, 0.0);
 	}
 	else
 	{
 	    //если место находится под навесом, либо рядом со стеной
-		obj_id = CreateObject(modelid, dx, dy, Z_coord+height+1.0, rotx, roty, rotz, OBJECT_DISTANCE);
+		obj_id = CreateDynamicObject(modelid, dx, dy, Z_coord+height+1.0, rotx, roty, rotz, -1, -1, -1, OBJECT_DISTANCE, 0.0);
 	}
 
 	//указываем координаты объекта, обнуляем поля владельца и точки появления объекта, указываем кто выложил и obj_id
@@ -1456,9 +1456,9 @@ public get_objects_properties(playerid, inv_isrot[6][3], Float:inv_deg[6][3], Fl
 			//обнуляем вледельца для объекта и обнуляем поле игрового объекта и точки появления объекта
 		    mysql_format(gMysql, request, sizeof(request), "UPDATE objects SET vector=NULL,placex=NULL,placey=NULL,placez=NULL,add_rotx=0,add_roty=0,add_rotz=0,pl_owner_id=NULL,th_owner_id=NULL,obj_id=NULL,dot_id=NULL WHERE id=%d", object_id);
 			res = mysql_query(gMysql, request);
-			if(IsValidObject(obj_id))
+			if(IsValidDynamicObject(obj_id))
 			{
-			    DestroyObject(obj_id);
+			    DestroyDynamicObject(obj_id);
 			}
 			if(cache_is_valid(result, gMysql))
 				cache_delete(result);
@@ -1515,9 +1515,9 @@ public get_vehicle_objects_properties(vehicleid, inv_isrot[MAX_INVENTORY_ON_VEHI
 			//обнуляем вледельца для объекта и обнуляем поле игрового объекта и точки появления объекта
 		    mysql_format(gMysql, request, sizeof(request), "UPDATE objects SET vector=NULL,placex=NULL,placey=NULL,placez=NULL,add_rotx=0,add_roty=0,add_rotz=0,pl_owner_id=NULL,th_owner_id=NULL,obj_id=NULL,dot_id=NULL WHERE id=%d", object_id);
 			res = mysql_query(gMysql, request);
-			if(IsValidObject(obj_id))
+			if(IsValidDynamicObject(obj_id))
 			{
-			    DestroyObject(obj_id);
+			    DestroyDynamicObject(obj_id);
 			}
 			if(cache_is_valid(result, gMysql))
 				cache_delete(result);
@@ -1592,8 +1592,8 @@ public get_inventory_properties(playerid, inv_isrot[6][3], Float:inv_deg[6][3], 
 		if(cache_is_valid(result, gMysql))
 			cache_delete(result);
 
-		if(IsValidObject(obj_id))
-		    DestroyObject(obj_id);
+		if(IsValidDynamicObject(obj_id))
+		    DestroyDynamicObject(obj_id);
 
 		//немного корректируем базу
 		//указываем вледельца для объекта и обнуляем поле игрового объекта и точки появления объекта
@@ -2744,9 +2744,9 @@ stock put_object_on_free_place(object_id)
 			}
 	    }
 	    if(rotatable)
-			obj_id = CreateObject(inworld_id, x, y, z+height, rotx+add_rotx, roty+add_roty, rotz, OBJECT_DISTANCE);
+			obj_id = CreateDynamicObject(inworld_id, x, y, z+height, rotx+add_rotx, roty+add_roty, rotz, -1, -1, -1, OBJECT_DISTANCE, 0.0);
 	    else
-			obj_id = CreateObject(inworld_id, x, y, z+height, rotx, roty, rotz, OBJECT_DISTANCE);
+			obj_id = CreateDynamicObject(inworld_id, x, y, z+height, rotx, roty, rotz, -1, -1, -1, OBJECT_DISTANCE, 0.0);
 	    mysql_format(gMysql, request, sizeof(request), "UPDATE objects SET vector=%f,placex=%f,placey=%f,placez=%f,add_rotx=%f,add_roty=%f,add_rotz=0,obj_id=%d,dot_id=%d,pl_owner_id=NULL,th_owner_id=NULL,value=%d,unused=0 WHERE id=%d", VectorSize(x,y,z), x, y, z, add_rotx, add_roty, obj_id, dot_id, def_value, object_id);
 		mysql_query(gMysql, request);
 	}

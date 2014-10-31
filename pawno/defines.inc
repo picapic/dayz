@@ -68,7 +68,3 @@
 #define STANDART_RANGE_VALUE 2.5 //максимальная дистанция до подбираемых объектов
 
 #define DROP_DISTANCE_FROM_PLAYER 1.5 //дистанция до выкладываемого объекта
-
-#define CreateObject(%1,%2,%3,%4,%5,%6,%7,%8) CreateDynamicObject(%1, %2, %3, %4, %5, %6, %7, -1, -1, -1, %8, 0.0)
-#define IsValidObject IsValidDynamicObject
-#define DestroyObject DestroyDynamicObject
