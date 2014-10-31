@@ -134,7 +134,7 @@ public player_login(playerid, password[])
     GetPlayerName(playerid, name, sizeof(name));
     
     mysql_format(gMysql, request, sizeof(request), "SELECT name,IFNULL(passwd, md5(\"password\")) as passwd,reg_ip,last_ip,reg_date,last_date,md5(\"%s\") as input_passwd FROM players where name=\"%s\"", password, name);
-    printf("%s\n", request);
+//    printf("%s\n", request); //отладка!!!
 	result = mysql_query(gMysql, request);
 	cache_get_data(rows, fields, gMysql);
 	if(rows == 0)
