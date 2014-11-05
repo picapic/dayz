@@ -3111,7 +3111,7 @@ public save_state_and_position(playerid)
 	GetPlayerPos(playerid, x, y, z);
 	GetPlayerFacingAngle(playerid, ang);
 
-    mysql_format(gMysql, request, sizeof(request), "UPDATE characters SET placex=%f,placey=%f,placez=%f,angle=%f,health=%d,hunger=%d,thirst=%d,wound=%d,killer=%d WHERE player_id=%d LIMIT 1", x, y, z, ang, gHealth[playerid], gHunger[playerid], gThirst[playerid], gWound[playerid], gKiller[playerid], gPlayersID[playerid]);
+    mysql_format(gMysql, request, sizeof(request), "UPDATE characters SET placex=%f,placey=%f,placez=%f,angle=%f,health=%d,hunger=%d,thirst=%d,wound=%d,killer_id=%d WHERE player_id=%d LIMIT 1", x, y, z, ang, gHealth[playerid], gHunger[playerid], gThirst[playerid], gWound[playerid], gKiller[playerid], gPlayersID[playerid]);
 	mysql_query(gMysql, request);
 }
 
