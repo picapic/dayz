@@ -1914,10 +1914,27 @@ public create_new_vehicle(object_id, Float:x, Float:y, Float:z, Float:rotz, inwo
 	new rows, fields;
 	new Cache:result;
 
-    mysql_format(gMysql, request, sizeof(request), "INSERT INTO veh_data(object_id) values(%d)", object_id);
-	mysql_query(gMysql, request);
-    mysql_format(gMysql, request, sizeof(request), "INSERT INTO veh_invent(object_id) values(%d)", object_id);
-	mysql_query(gMysql, request);
+	mysql_format(gMysql, request, sizeof(request), "SELECT object_id FROM veh_data WHERE object_id=%d", object_id);
+	result = mysql_query(gMysql, request);
+	cache_get_data(rows, fields, gMysql);
+	if(rows <= 0)
+	{
+	    mysql_format(gMysql, request, sizeof(request), "INSERT INTO veh_data(object_id) values(%d)", object_id);
+		mysql_query(gMysql, request);
+	}
+	if(cache_is_valid(result, gMysql))
+		cache_delete(result);
+
+	mysql_format(gMysql, request, sizeof(request), "SELECT object_id FROM veh_invent WHERE object_id=%d", object_id);
+	result = mysql_query(gMysql, request);
+	cache_get_data(rows, fields, gMysql);
+	if(rows <= 0)
+	{
+	    mysql_format(gMysql, request, sizeof(request), "INSERT INTO veh_invent(object_id) values(%d)", object_id);
+		mysql_query(gMysql, request);
+	}
+	if(cache_is_valid(result, gMysql))
+		cache_delete(result);
 
 	mysql_format(gMysql, request, sizeof(request), "UPDATE veh_data SET panels=0,doors=0,light=0,tires=0,patrol=0,is_working=0 WHERE object_id=%d", object_id);
 	mysql_query(gMysql, request);
@@ -1974,10 +1991,27 @@ public create_old_vehicle(object_id, Float:x, Float:y, Float:z, Float:rotz, inwo
 	new inv[MAX_INVENTORY_ON_VEHICLE], obj[MAX_INVENTORY_ON_VEHICLE];
 	new Cache:result;
 
-    mysql_format(gMysql, request, sizeof(request), "INSERT INTO veh_data(object_id) values(%d)", object_id);
-	mysql_query(gMysql, request);
-    mysql_format(gMysql, request, sizeof(request), "INSERT INTO veh_invent(object_id) values(%d)", object_id);
-	mysql_query(gMysql, request);
+	mysql_format(gMysql, request, sizeof(request), "SELECT object_id FROM veh_data WHERE object_id=%d", object_id);
+	result = mysql_query(gMysql, request);
+	cache_get_data(rows, fields, gMysql);
+	if(rows <= 0)
+	{
+	    mysql_format(gMysql, request, sizeof(request), "INSERT INTO veh_data(object_id) values(%d)", object_id);
+		mysql_query(gMysql, request);
+	}
+	if(cache_is_valid(result, gMysql))
+		cache_delete(result);
+
+	mysql_format(gMysql, request, sizeof(request), "SELECT object_id FROM veh_invent WHERE object_id=%d", object_id);
+	result = mysql_query(gMysql, request);
+	cache_get_data(rows, fields, gMysql);
+	if(rows <= 0)
+	{
+	    mysql_format(gMysql, request, sizeof(request), "INSERT INTO veh_invent(object_id) values(%d)", object_id);
+		mysql_query(gMysql, request);
+	}
+	if(cache_is_valid(result, gMysql))
+		cache_delete(result);
 
 	mysql_format(gMysql, request, sizeof(request), "SELECT c.value,a.cells,a.patrol_cons,a.max_patrol,b.color1,b.color2,b.panels,b.doors,b.light,b.tires,b.patrol,b.is_working FROM objects c INNER JOIN (vehicles a, veh_data b) ON (c.id=b.object_id AND c.thing_id=a.thing_id) WHERE c.id=%d LIMIT 1", object_id);
 	result = mysql_query(gMysql, request);
