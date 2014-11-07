@@ -389,7 +389,7 @@ ru {Вы не ранены!};
 
 [YOU_ARE_NOT_HUNGRY]
 en {You are not hungry!};
-ru {Да вы, сударь, обожрались!}
+ru {Да вы, сударь, обожрались!};
 
 [YOU_ARE_NOT_THIRSTY]
 en {You are not thirsty!};
