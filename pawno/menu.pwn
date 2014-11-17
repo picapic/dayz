@@ -1110,6 +1110,13 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	return 1;
 }
 
+public OnPlayerClickTextDraw(playerid, Text:clickedid)
+{
+	if(clickedid == INVALID_TEXT_DRAW && gInventoryMenuShow[playerid] == 1)
+	    hide_menu(playerid);
+	return 1;
+}
+
 public OnRconLoginAttempt(ip[], password[], success)
 {
 	return 1;
