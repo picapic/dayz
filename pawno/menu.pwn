@@ -1112,7 +1112,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 public OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
-	if(clickedid == INVALID_TEXT_DRAW && gInventoryMenuShow[playerid] == 1)
+	if(clickedid == Text:INVALID_TEXT_DRAW && gInventoryMenuShow[playerid] == 1)
 	    hide_menu(playerid);
 	return 1;
 }
